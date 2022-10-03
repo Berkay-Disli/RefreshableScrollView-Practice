@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var maxNumber = 2
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(1...maxNumber, id:\.self) { item in
+                        Text("Item: **\(item)**")
+                            .font(.title3)
+                    }
+                }
+                .padding(.vertical)
+            }
+            .padding(.horizontal)
+            .refreshable {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    withAnimation(.easeInOut) {
+                        maxNumber += 2
+                    }
+                }
+            }
+            .navigationTitle("Refreshable")
+            .preferredColorScheme(.dark)
         }
-        .padding()
     }
 }
 
